@@ -1,13 +1,42 @@
 <template>
   <XBox class="my-2.5">
+    <div class="flex gap-2 items-center">
+      <input v-model="enterToPost" type="checkbox" id="enterToPost" />
+      <label for="enterToPost">Use ENTER to Post</label>
+    </div>
+
     <XTextarea
       v-model="form.content"
       label="What's on your mind?"
-      placeholder="Write something..."
+      :placeholder="'Write something...' + (enterToPost ? ' and press ENTER' : '')"
       :errors="errors?.content"
-      :rows="5"
+      :rows="enterToPost ? 3 : 5"
+      @keyup.enter="
+        () => {
+          enterToPost ? postStatus() : '';
+        }
+      "
     />
-    <XButton label="Post Your Thoughts" color="primary" @click="postStatus" :loading="form.processing" />
+
+    <XFileUpload
+      v-if="showUploader"
+      v-model="form.files"
+      multiple
+      accept="image/*"
+      :errors="errors?.files"
+      @hide="showUploader = false"
+    />
+
+    <div class="flex justify-between">
+      <XButton
+        v-if="!enterToPost"
+        label="Post Your Thoughts"
+        color="primary"
+        @click="postStatus"
+        :loading="form.processing"
+      />
+      <XButton v-if="!showUploader" label="Add Files" color="secondary" @click="showUploader = true" />
+    </div>
   </XBox>
 
   <PaginatedPosts :posts="posts" />
@@ -20,18 +49,43 @@ import { Link, useForm, router } from '@inertiajs/vue3';
 import XBox from '@/components/XBox.vue';
 import XButton from '@/components/XButton.vue';
 import PaginatedPosts from '@/sections/PaginatedPosts.vue';
+import { ref } from 'vue';
+import XFileUpload from '@/components/XFileUpload.vue';
 
 const props = defineProps<{ posts: PaginatedData<Post> } & InertiaProps>();
 
 setInterval(() => router.reload(), 7 * 1000);
 
-const form = useForm<{ content: string }>({ content: '' });
+const enterToPost = ref<boolean>(true);
+const showUploader = ref(false);
+const form = useForm<{ content: string; files?: any[] }>({ content: '' });
 
 function postStatus() {
-  form.post('/posts', {
-    onSuccess: () => {
-      form.content = '';
+  if (!form.files?.length) {
+    form.post('/posts', {
+      onSuccess: () => {
+        form.content = '';
+        form.files = [];
+      },
+    });
+    return;
+  }
+
+  router.post(
+    '/posts',
+    {
+      content: form.content,
+      files: form.files,
     },
-  });
+    {
+      onStart: () => (form.processing = true),
+      onSuccess: () => {
+        form.content = '';
+        form.files = [];
+        showUploader.value = false;
+      },
+      onFinish: () => (form.processing = false),
+    }
+  );
 }
 </script>

@@ -8,4 +8,9 @@ export type Post = {
   user: User;
   created_ago: string;
   is_new: boolean;
+  files?: File[];
 } & TimeStamp;
+
+export type File = {
+  path: string;
+};

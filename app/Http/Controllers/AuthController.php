@@ -70,6 +70,9 @@ class AuthController extends Controller
         $user->password = bcrypt($request->password);
 
         if ($user->save()) {
+            $user->username = $user->id;
+            $user->save();
+
             auth()->login($user);
 
             return redirect($user->dashboard_url)->with([

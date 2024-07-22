@@ -11,6 +11,8 @@ class Post extends Model
 
     protected $guarded = ['id', 'user_id'];
 
+    protected $casts = ['files' => 'json'];
+
     // Relationships
     public function user()
     {

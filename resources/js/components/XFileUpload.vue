@@ -5,28 +5,34 @@
       name="file-upload"
       type="file"
       ref="uploader"
-      @change="$emit('update:modelValue', multiple ? $event.target.files : $event.target.files[0])"
+      @change="$emit('update:modelValue', multiple ? Object.values($event.target.files) : $event.target.files[0])"
       :multiple="multiple"
       :accept="accept"
       class="sr-only"
     />
-    <div v-if="modelValue" class="mt-2">
-      <img :src="isString(modelValue) ? modelValue : getDataURL(modelValue)" class="h-20 mb-2" alt="" />
-      <div class="text-xs flex items-center">
-        <span v-if="!isString(modelValue)">{{ modelValue.name }} ({{ (modelValue.size / 1024).toFixed(2) }} KB)</span>
-        <XButton
-          @click="$emit('update:modelValue', null)"
-          class="ml-2"
-          type="button"
-          variant="danger"
-          size="small"
-          :icon="TrashIcon"
-        />
+    <div
+      v-if="Array.isArray(modelValue) ? modelValue.length > 0 : modelValue"
+      class="grid grid-cols-3 md:grid-cols-6 mt-2 gap-2"
+    >
+      <div v-for="(file, i) in Array.isArray(modelValue) ? modelValue : [modelValue]">
+        <img :src="isString(file) ? file : getDataURL(file)" class="w-full" alt="" />
+        <div class="text-xs flex items-center">
+          <XBadge v-if="!isString(file)">{{ (file.size / 1024).toFixed(2) }} KB</XBadge>
+          <XButton
+            @click="removeFile(file, i)"
+            class="ml-2 rounded-2xl"
+            type="button"
+            color="secondary"
+            size="small"
+            :icon="TrashIcon"
+            label="Remove"
+          />
+        </div>
       </div>
     </div>
     <div
       v-else
-      @click="uploader.click()"
+      @click="open"
       class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-6 cursor-pointer"
     >
       <div class="text-center">
@@ -53,6 +59,7 @@ import { PhotoIcon, TrashIcon } from '@heroicons/vue/20/solid';
 import { computed, ref } from 'vue';
 import XButton from './XButton.vue';
 import { isString } from 'lodash';
+import XBadge from '@/components/XBadge.vue';
 
 type Props = {
   id?: string;
@@ -67,7 +74,7 @@ type Props = {
 
 const props = withDefaults(defineProps<Props>(), {});
 
-defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'hide']);
 
 const uploader = ref<HTMLInputElement | null>(null);
 
@@ -85,4 +92,24 @@ const hasErrors = computed(() => {
 
   return !!props.errors;
 });
+
+function open() {
+  uploader.value.click();
+}
+
+function removeFile(file: any, i: number) {
+  if (props.multiple && props.modelValue.length > 1) {
+    if (i === 0) {
+      emit('update:modelValue', (props.modelValue as any[]).slice(1));
+    } else {
+      emit('update:modelValue', [
+        ...(props.modelValue as any[]).slice(0, i),
+        ...(props.modelValue as any[]).slice(i + 1, props.modelValue.length),
+      ]);
+    }
+    return;
+  }
+  emit('update:modelValue', null);
+  emit('hide');
+}
 </script>
