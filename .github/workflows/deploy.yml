@@ -1,0 +1,41 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Deploy on Server Over SSH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Deployment
+        uses: appleboy/ssh-action@master
+        with:
+          script_stop: true
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+          script: |
+            cd /var/www/amardetails/amardetails/
+            git checkout main -f
+            git pull
+            php8.3 $(which composer) install
+            php8.3 artisan cache:clear
+            php8.3 artisan migrate --force
+            pnpm install
+            pnpm build
+            php8.3 artisan config:cache
+            php8.3 artisan route:cache
+            php8.3 artisan view:cache
+            chown -R www-data:www-data .
+
+#      - name: Slack Notification On Success
+#        uses: rtCamp/action-slack-notify@master
+#        env:
+#          SLACK_CHANNEL: nxs-bot
+#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
