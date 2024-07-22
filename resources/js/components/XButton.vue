@@ -49,7 +49,7 @@ const colors = {
   default: '',
   primary: 'border-transparent bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500',
   secondary: 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-indigo-500',
-  info: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
+  info: 'border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
   success: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
   warning: 'border-transparent bg-lime-600 text-white hover:bg-lime-700 focus:ring-lime-500',
   danger: 'border-transparent bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',

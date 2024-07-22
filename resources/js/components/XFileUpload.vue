@@ -45,7 +45,7 @@
           </label>
           <p class="pl-1">or drag and drop</p>
         </div>
-        <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 2MB</p>
+        <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
       </div>
     </div>
     <p v-if="hasErrors" class="mt-2 text-sm text-red-600">

@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [PageController::class, 'index'])->name('index');
+    Route::get('/pinned', [PageController::class, 'pinned'])->name('pinned');
     Route::get('/profile/{slug}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show');
     Route::resource('/posts', PostController::class);

@@ -16,6 +16,13 @@ class PageController extends Controller
         return Inertia::render('Index', ['posts' => PostResource::collection($posts)]);
     }
 
+    public function pinned()
+    {
+        $posts = Post::query()->where('pinned', true)->with('user')->latest('id')->cursorPaginate(50);
+
+        return Inertia::render('Pinned', ['posts' => PostResource::collection($posts)]);
+    }
+
     public function show($slug)
     {
         return Inertia::render('Single');

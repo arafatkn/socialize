@@ -3,6 +3,7 @@
     <div class="container mx-auto">
       <div class="flex items-center py-4 justify-between">
         <Link href="/"><x-button label="Home" color="secondary" rounded /></Link>
+        <Link href="/pinned"><x-button label="Pinned" color="info" rounded /></Link>
 
         <div class="flex gap-2">
           <template v-if="!user">

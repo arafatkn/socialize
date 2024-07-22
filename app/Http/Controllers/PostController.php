@@ -24,9 +24,9 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'content' => 'bail|required',
-            'files' => 'nullable|array',
-            'files.*' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
+            'content' => 'bail|required_without:files',
+            'files' => 'bail|required_without:content|array',
+            'files.*' => 'bail|nullable|image|mimes:jpeg,jpg,png,gif|max:10240',
         ]);
 
         if ($request->file('files')) {
@@ -39,7 +39,7 @@ class PostController extends Controller
         }
 
         $post = new Post([
-            'content' => $request->input('content'),
+            'content' => $request->input('content', '') ?? '',
         ]);
         $post->user_id = auth()->id();
         if (isset($files)) {
