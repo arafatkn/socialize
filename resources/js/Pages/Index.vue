@@ -54,7 +54,7 @@ import XFileUpload from '@/components/XFileUpload.vue';
 
 let { errors } = defineProps<{ posts: PaginatedData<Post> } & InertiaProps>();
 
-setInterval(() => router.reload(), 7 * 1000);
+setInterval(() => router.reload(), 10 * 1000);
 
 const enterToPost = ref<boolean>(true);
 const showUploader = ref(false);

@@ -1,28 +1,19 @@
 <template>
   <div class="bg-blue-500">
     <div class="container mx-auto">
-      <div class="flex items-center py-4 justify-between">
+      <div class="flex items-center py-4 justify-between gap-1">
         <Link href="/"><x-button label="Home" color="secondary" rounded /></Link>
 
-        <div class="flex gap-2">
+        <div class="flex gap-1">
           <Link href="/pinned"><x-button label="Pinned" color="info" rounded /></Link>
           <!--          <Link href="/users"><x-button label="All Users" color="info" rounded /></Link>-->
+          <Link href="/chats"><x-button label="Messages" color="info" rounded /></Link>
         </div>
 
         <div class="flex gap-2">
-          <template v-if="!user">
-            <Link href="/auth/login">
-              <XButton label="Login" color="primary" />
-            </Link>
-            <Link href="/auth/register">
-              <XButton label="Register" color="secondary" />
-            </Link>
-          </template>
-          <template v-else>
-            <Link href="/auth/logout">
-              <XButton :label="`Logout (${user?.name})`" color="secondary" />
-            </Link>
-          </template>
+          <Link href="/auth/logout">
+            <XButton :label="`Logout`" color="secondary" />
+          </Link>
         </div>
       </div>
     </div>

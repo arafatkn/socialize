@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PostResource;
+use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -27,7 +28,8 @@ class ProfileController extends Controller
         }
 
         $posts = $user->posts()->latest('id')->cursorPaginate(30);
+        $chat = Chat::where('user1_id', min($user->id, auth()->id()))->where('user2_id', max($user->id, auth()->id()))->first();
 
-        return Inertia::render('Profile/Show', ['userData' => $user, 'posts' => PostResource::collection($posts)]);
+        return Inertia::render('Profile/Show', ['userData' => $user, 'chat' => $chat, 'posts' => PostResource::collection($posts)]);
     }
 }

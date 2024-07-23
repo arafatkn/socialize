@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -25,7 +27,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show');
     Route::post('/posts/{post}/pin', [PostController::class, 'pin'])->name('posts.pin');
     Route::post('/posts/{post}/unpin', [PostController::class, 'unpin'])->name('posts.unpin');
-    Route::resource('/posts', PostController::class);
+    Route::resource('/posts', PostController::class)->except(['edit', 'destroy']);
+    Route::resource('/chats', ChatController::class)->except(['edit', 'destroy']);
+    Route::post('/chats/{chat}/messages', [MessageController::class, 'store'])->name('chats.messages.store');
 });
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => 'guest'], function () {
