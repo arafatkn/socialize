@@ -52,4 +52,26 @@ class PostController extends Controller
 
         return back()->with('error', 'Unable to post');
     }
+
+    public function pin(Post $post)
+    {
+        $post->pinned = true;
+
+        if ($post->save()) {
+            return back()->with('success', 'Pinned successfully');
+        }
+
+        return back()->with('error', 'Unable to Pin');
+    }
+
+    public function unpin(Post $post)
+    {
+        $post->pinned = false;
+
+        if ($post->save()) {
+            return back()->with('success', 'Unpinned successfully');
+        }
+
+        return back()->with('error', 'Unable to Unpin');
+    }
 }

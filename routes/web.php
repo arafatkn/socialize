@@ -23,6 +23,8 @@ Route::group(['middleware' => 'auth'], function () {
 //    Route::get('/users', [ProfileController::class, 'index'])->name('users.index');
     Route::get('/profile/{slug}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show');
+    Route::post('/posts/{post}/pin', [PostController::class, 'pin'])->name('posts.pin');
+    Route::post('/posts/{post}/unpin', [PostController::class, 'unpin'])->name('posts.unpin');
     Route::resource('/posts', PostController::class);
 });
 

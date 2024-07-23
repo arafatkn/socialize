@@ -17,6 +17,7 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'content' => $this->content,
+            'pinned' => $this->pinned,
             'created_at' => $this->created_at,
             'created_ago' => $this->created_at->diffForHumans(),
             'is_new' => $this->created_at->diffInSeconds() < 15,

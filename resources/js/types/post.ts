@@ -9,6 +9,7 @@ export type Post = {
   created_ago: string;
   is_new: boolean;
   files?: File[];
+  pinned: boolean;
 } & TimeStamp;
 
 export type File = {
