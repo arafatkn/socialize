@@ -15,9 +15,16 @@
       class="grid grid-cols-3 md:grid-cols-6 mt-2 gap-2"
     >
       <div v-for="(file, i) in Array.isArray(modelValue) ? modelValue : [modelValue]">
-        <img :src="isString(file) ? file : getDataURL(file)" class="w-full" alt="" />
+        <img
+          v-if="file.type.startsWith('image/')"
+          :src="isString(file) ? file : getDataURL(file)"
+          class="w-full"
+          alt=""
+        />
+        <div v-else class="mb-1 text-sm">{{ file.name }}</div>
         <div class="text-xs flex items-center">
-          <XBadge v-if="!isString(file)">{{ (file.size / 1024).toFixed(2) }} KB</XBadge>
+          <XBadge v-if="file.size > 1024 * 1024">{{ (file.size / (1024 * 1024)).toFixed(2) }} MB</XBadge>
+          <XBadge v-else>{{ (file.size / 1024).toFixed(2) }} KB</XBadge>
           <XButton
             @click="removeFile(file, i)"
             class="ml-2 rounded-2xl"
@@ -45,7 +52,9 @@
           </label>
           <p class="pl-1">or drag and drop</p>
         </div>
-        <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+        <p class="text-xs leading-5 text-gray-600">
+          {{ accept?.replaceAll('/*', '').replaceAll(',', ', ') }} up to 100MB
+        </p>
       </div>
     </div>
     <p v-if="hasErrors" class="mt-2 text-sm text-red-600">

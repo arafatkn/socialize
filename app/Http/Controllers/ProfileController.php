@@ -10,6 +10,13 @@ use Inertia\Inertia;
 
 class ProfileController extends Controller
 {
+    public function index()
+    {
+        $users = User::query()->get();
+
+        return Inertia::render('Profile/Index', ['users' => $users]);
+    }
+
     public function show($slug)
     {
         if (Str::contains($slug, '@')) {

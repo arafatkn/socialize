@@ -13,4 +13,7 @@ export type Post = {
 
 export type File = {
   path: string;
+  mime?: string;
+  size?: number;
+  extension?: string;
 };

@@ -11,11 +11,18 @@
     </div>
     <p class="text-gray-600" v-html="post.content.replaceAll('\n', '<br/>')"></p>
     <div v-if="post.files && post.files.length > 0" class="mt-2.5 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
-      <template v-for="file in post.files" :key="file.path">
-        <a :href="file.path" target="_blank">
-          <img :src="file.path" />
-        </a>
-      </template>
+      <div v-for="file in post.files" :key="file.path">
+        <video v-if="file.mime?.startsWith('video/')" :src="file.path" controls />
+        <audio v-else-if="file.mime?.startsWith('audio/')" :src="file.path" controls />
+        <a v-else :href="file.path" target="_blank"><img :src="file.path" /></a>
+        <a :href="file.path" class="text-primary-400" target="_blank"
+          >Download
+          <span v-if="file.size"
+            >(<span v-if="file.size > 1024 * 1024">{{ (file.size / (1024 * 1024)).toFixed(2) }} MB</span
+            ><span v-else>{{ (file.size / 1024).toFixed(2) }} KB</span>)</span
+          ></a
+        >
+      </div>
     </div>
   </div>
 </template>

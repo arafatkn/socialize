@@ -26,7 +26,7 @@ class PostController extends Controller
         $request->validate([
             'content' => 'bail|required_without:files',
             'files' => 'bail|required_without:content|array',
-            'files.*' => 'bail|nullable|image|mimes:jpeg,jpg,png,gif|max:10240',
+            'files.*' => 'bail|nullable|file|mimetypes:image/*,audio/*,video/*|max:102400',
         ]);
 
         if ($request->file('files')) {
@@ -34,7 +34,7 @@ class PostController extends Controller
 
             foreach ($request->file('files') as $file) {
                 $path = $file->storeAs('posts', strtolower(Str::ulid()).'.' . $file->extension(), 'public');
-                $files[] = ['path' => $path];
+                $files[] = ['path' => $path, 'size' => $file->getSize(), 'extension' => $file->extension(), 'mime' => $file->getMimeType()];
             }
         }
 

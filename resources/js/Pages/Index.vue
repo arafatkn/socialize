@@ -22,14 +22,14 @@
       v-if="showUploader"
       v-model="form.files"
       multiple
-      accept="image/*"
+      accept="image/*,video/*,audio/*"
       :errors="errors?.files"
       @hide="showUploader = false"
     />
 
     <div class="flex justify-between">
       <XButton
-        v-if="!enterToPost"
+        v-if="!enterToPost || showUploader"
         label="Post Your Thoughts"
         color="primary"
         @click="postStatus"
@@ -42,17 +42,17 @@
   <PaginatedPosts :posts="posts" />
 </template>
 <script setup lang="ts">
-import type { InertiaProps, PaginatedData } from '@/types';
+import type { AnyObject, InertiaProps, PaginatedData } from '@/types';
 import type { Post } from '@/types/post';
 import XTextarea from '@/components/XTextarea.vue';
-import { Link, useForm, router } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 import XBox from '@/components/XBox.vue';
 import XButton from '@/components/XButton.vue';
 import PaginatedPosts from '@/sections/PaginatedPosts.vue';
 import { ref } from 'vue';
 import XFileUpload from '@/components/XFileUpload.vue';
 
-const props = defineProps<{ posts: PaginatedData<Post> } & InertiaProps>();
+let { errors } = defineProps<{ posts: PaginatedData<Post> } & InertiaProps>();
 
 setInterval(() => router.reload(), 7 * 1000);
 
@@ -85,6 +85,10 @@ function postStatus() {
         showUploader.value = false;
       },
       onFinish: () => (form.processing = false),
+      onError: (err: AnyObject) => {
+        console.log(err);
+        errors = { message: 'Error', ...err };
+      },
     }
   );
 }
