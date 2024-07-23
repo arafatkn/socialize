@@ -1,55 +1,68 @@
 <template>
   <div class="grid grid-cols-4 mt-5 gap-2">
     <div class="col-span-1">
-      <Link v-for="chat in chats" :key="chat.id" :href="`/chats/${chat.id}`" class="text-primary-500">
-        <XBox>{{ getReceiver(chat)?.name }}</XBox>
-      </Link>
+      <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+        <Link
+          v-for="ch in chats"
+          :key="ch.id"
+          :href="`/chats/${ch.id}`"
+          class="block px-6 py-4 hover:bg-gray-100 text-primary-500"
+          :class="ch.id === chat.id ? 'bg-amber-50' : ''"
+        >
+          {{ getReceiver(ch)?.name }}
+        </Link>
+      </div>
     </div>
     <div class="col-span-3">
       <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
         <div class="bg-blue-400 px-4 py-5 sm:px-6 text-white font-semibold text-lg">{{ receiver?.name }}</div>
 
         <div class="px-4 py-5 sm:px-6">
-          <XBox class="my-2.5">
-            <div class="flex gap-2 items-center">
-              <input v-model="enterToSend" type="checkbox" id="enterToSend" />
-              <label for="enterToSend">Use ENTER to Send</label>
-            </div>
+          <div class="flex gap-2 items-center">
+            <input v-model="enterToSend" type="checkbox" id="enterToSend" />
+            <label for="enterToSend">Use ENTER to Send</label>
+          </div>
 
-            <XTextarea
-              v-model="form.content"
-              :placeholder="'Write something...' + (enterToSend ? ' and press ENTER' : '')"
-              :errors="errors?.content"
-              :rows="enterToSend ? 3 : 5"
-              @keyup.enter="
-                () => {
-                  enterToSend ? sendMessage() : '';
-                }
-              "
+          <XTextarea
+            v-model="form.content"
+            :placeholder="'Write something...' + (enterToSend ? ' and press ENTER' : '')"
+            :errors="errors?.content"
+            :rows="enterToSend ? 3 : 5"
+            @keyup.enter="
+              () => {
+                enterToSend ? sendMessage() : '';
+              }
+            "
+          />
+
+          <XFileUpload
+            v-if="showUploader"
+            v-model="form.files"
+            multiple
+            accept="image/*,video/*,audio/*"
+            :errors="errors?.files"
+            @hide="showUploader = false"
+          />
+
+          <div class="flex justify-between">
+            <XButton
+              v-if="!enterToSend || showUploader"
+              label="Send Message"
+              color="primary"
+              @click="sendMessage"
+              :loading="form.processing"
             />
+            <XButton v-if="!showUploader" label="Add Files" color="secondary" @click="showUploader = true" />
+          </div>
 
-            <XFileUpload
-              v-if="showUploader"
-              v-model="form.files"
-              multiple
-              accept="image/*,video/*,audio/*"
-              :errors="errors?.files"
-              @hide="showUploader = false"
-            />
-
-            <div class="flex justify-between">
-              <XButton
-                v-if="!enterToSend || showUploader"
-                label="Send Message"
-                color="primary"
-                @click="sendMessage"
-                :loading="form.processing"
-              />
-              <!--              <XButton v-if="!showUploader" label="Add Files" color="secondary" @click="showUploader = true" />-->
-            </div>
-          </XBox>
+          <div class="h-2"></div>
 
           <SingleMessage v-for="message in messages.data" :message="message" />
+
+          <div class="flex gap-2 justify-center mt-10">
+            <Link v-if="messages.links?.prev" :href="messages.links.prev"><XButton label="Prev Page" /></Link>
+            <Link v-if="messages.links?.next" :href="messages.links.next"><XButton label="Next Page" /></Link>
+          </div>
         </div>
       </div>
     </div>
