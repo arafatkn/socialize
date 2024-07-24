@@ -1,5 +1,5 @@
 <template>
-  <XBox class="my-2.5">
+  <XBox v-if="user?.permissions?.feed" class="my-2.5">
     <div class="flex gap-2 items-center">
       <input v-model="enterToPost" type="checkbox" id="enterToPost" />
       <label for="enterToPost">Use ENTER to Post</label>
@@ -39,7 +39,7 @@
     </div>
   </XBox>
 
-  <PaginatedPosts :posts="posts" />
+  <PaginatedPosts v-if="user?.permissions?.feed" :posts="posts" />
 </template>
 <script setup lang="ts">
 import type { AnyObject, InertiaProps, PaginatedData } from '@/types';

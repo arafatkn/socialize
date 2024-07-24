@@ -84,11 +84,11 @@ const startLogin = () => {
               <label for="remember-me" class="ml-2 block text-sm text-gray-900">Remember me</label>
             </div>
 
-            <div class="text-sm">
-              <Link href="/auth/lost-password" class="font-medium text-indigo-600 hover:text-indigo-500"
-                >Forgot your password?</Link
-              >
-            </div>
+            <!--            <div class="text-sm">-->
+            <!--              <Link href="/auth/lost-password" class="font-medium text-indigo-600 hover:text-indigo-500"-->
+            <!--                >Forgot your password?</Link-->
+            <!--              >-->
+            <!--            </div>-->
           </div>
 
           <div>

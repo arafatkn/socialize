@@ -8,7 +8,7 @@
         <Link :href="`/profile/${post.user.username}`">{{ post.user.name }}</Link>
         <div class="text-sm text-gray-400">~ {{ post.created_ago }}</div>
       </div>
-      <div class="text-sm text-gray-400">
+      <div class="text-sm text-gray-400" v-if="($page.props.user as User)?.permissions?.admin">
         <XButton v-if="post.pinned" size="small" label="Unpin" color="secondary" @click="unpinPost(post.id)" />
         <XButton v-else size="small" label="Pin This" color="secondary" @click="pinPost(post.id)" />
       </div>
@@ -31,11 +31,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
 import type { Post } from '@/types/post';
 import XButton from '@/components/XButton.vue';
+import type { User } from '@/types/user';
 
 defineProps<{ post: Post }>();
+const $page = usePage();
 
 const form = useForm<{}>({});
 

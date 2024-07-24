@@ -5,14 +5,17 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import XAlert from '../../components/XAlert.vue';
 import XButton from '../../components/XButton.vue';
 import type { InertiaProps } from '@/types';
+import XInput from '@/components/XInput.vue';
 
 const props = defineProps<InertiaProps>();
 
 type FormType = {
+  username: string;
   name: string;
   email: string;
   password: string;
   password_confirmation: string;
+  reference: string;
 };
 
 const msgType = computed(() => {
@@ -24,10 +27,12 @@ const msgType = computed(() => {
 });
 
 const form = useForm<FormType>({
+  username: '',
   name: '',
   email: '',
   password: '',
   password_confirmation: '',
+  reference: '',
 });
 </script>
 
@@ -52,62 +57,24 @@ const form = useForm<FormType>({
           </XAlert>
           <XAlert v-if="form.recentlySuccessful" type="success">{{ errors?.message }}</XAlert>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Full Name</label>
-            <div class="mt-1">
-              <input
-                v-model="form.name"
-                type="text"
-                required
-                autocomplete="name"
-                class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-          </div>
+          <XInput
+            v-model="form.username"
+            label="Username (max 32 characters)"
+            :errors="form.errors?.username"
+            required
+          />
 
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-            <div class="mt-1">
-              <input
-                v-model="form.email"
-                name="email"
-                type="text"
-                required
-                autocomplete="no"
-                class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-            <div class="mt-1">
-              <input
-                v-model="form.password"
-                name="password"
-                type="password"
-                autocomplete="no"
-                required
-                class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label for="password_confirmation" class="block text-sm font-medium text-gray-700"
-              >Password Confirmation</label
-            >
-            <div class="mt-1">
-              <input
-                v-model="form.password_confirmation"
-                name="password_confirmation"
-                type="password"
-                autocomplete="no"
-                required
-                class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-          </div>
+          <XInput v-model="form.name" label="Full Name" :errors="form.errors?.name" required />
+          <XInput type="email" v-model="form.email" label="Email Address" :errors="form.errors?.email" required />
+          <XInput type="password" v-model="form.password" label="Password" :errors="form.errors?.password" required />
+          <XInput
+            type="password"
+            v-model="form.password_confirmation"
+            label="Password Confirmation"
+            :errors="form.errors?.password_confirmation"
+            required
+          />
+          <XInput v-model="form.reference" label="Reference" :errors="form.errors?.reference" required />
 
           <div>
             <XButton

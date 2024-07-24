@@ -1,7 +1,9 @@
 <template>
-  <div class="grid grid-cols-4 mt-5 gap-2">
+  <div class="grid sm:grid-cols-4 mt-5 gap-2">
     <div class="col-span-1">
-      <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+      <div
+        class="divide-y divide-gray-200 flex sm:flex-col overflow-x-scroll sm:overflow-hidden rounded-lg bg-white shadow"
+      >
         <Link
           v-for="ch in chats"
           :key="ch.id"

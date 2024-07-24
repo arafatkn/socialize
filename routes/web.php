@@ -22,14 +22,17 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [PageController::class, 'index'])->name('index');
     Route::get('/pinned', [PageController::class, 'pinned'])->name('pinned');
-//    Route::get('/users', [ProfileController::class, 'index'])->name('users.index');
     Route::get('/profile/{slug}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show');
-    Route::post('/posts/{post}/pin', [PostController::class, 'pin'])->name('posts.pin');
-    Route::post('/posts/{post}/unpin', [PostController::class, 'unpin'])->name('posts.unpin');
     Route::resource('/posts', PostController::class)->except(['edit', 'destroy']);
     Route::resource('/chats', ChatController::class)->except(['edit', 'destroy']);
     Route::post('/chats/{chat}/messages', [MessageController::class, 'store'])->name('chats.messages.store');
+});
+
+Route::group(['middleware' => ['auth', 'admin']], function () {
+    Route::get('/users', [ProfileController::class, 'index'])->name('users.index');
+    Route::post('/posts/{post}/pin', [PostController::class, 'pin'])->name('posts.pin');
+    Route::post('/posts/{post}/unpin', [PostController::class, 'unpin'])->name('posts.unpin');
 });
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => 'guest'], function () {

@@ -41,7 +41,7 @@ class AuthController extends Controller
 
         $user = auth()->user();
 
-        return redirect($user->dashboard_url)->with([
+        return redirect()->intended($user->dashboard_url)->with([
             'success' => 'You have been logged in successfully.',
         ]);
     }
@@ -60,22 +60,26 @@ class AuthController extends Controller
     public function registerAction(Request $request)
     {
         $request->validate([
+            'username' => 'bail|required|max:32|unique:users|regex:/^[0-9a-z._]+$/',
             'name' => 'bail|required|max:255',
             'email' => 'bail|required|email|unique:users',
             'password' => 'bail|required|min:6|confirmed',
+            'reference' => 'bail|required|max:200',
+        ], [
+            'username.regex' => 'Only a-z, 0-9, dot and underscore are allowed.'
         ]);
 
         $user = new User();
         $user->fill($request->only(['name', 'email']));
         $user->password = bcrypt($request->password);
+        $user->reference = $request->reference;
+        $user->username = strtolower($request->username);
+        $user->status = 'active';
 
         if ($user->save()) {
-            $user->username = $user->id;
-            $user->save();
-
             auth()->login($user);
 
-            return redirect($user->dashboard_url)->with([
+            return redirect()->intended($user->dashboard_url)->with([
                 'success' => 'Registration successful.',
             ]);
         }

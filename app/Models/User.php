@@ -31,7 +31,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'reference',
     ];
+
+    protected $appends = ['public_profile_url'];
 
     /**
      * The attributes that should be cast.
@@ -41,12 +44,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'permissions' => 'object',
     ];
 
     // Custom Attributes
     function getDashboardUrlAttribute(): string
     {
         return '/';
+    }
+
+    function getPublicProfileUrlAttribute(): string
+    {
+        return route('profile.show', $this->username);
     }
 
     // Scopes
