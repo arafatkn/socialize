@@ -36,6 +36,13 @@ class MessageController extends Controller
         $message->files = $files ?? null;
 
         if ($message->save()) {
+            if ($sender_id === $chat->user1_id) {
+                $chat->user2_unread_count += 1;
+            } else {
+                $chat->user1_unread_count += 1;
+            }
+            $chat->save();
+
             return back()->with('success', 'Sent successfully');
         }
 

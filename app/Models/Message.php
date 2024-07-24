@@ -11,6 +11,8 @@ class Message extends Model
 
     protected $guarded = ['id', 'sender_id', 'chat_id'];
 
+    protected $casts = ['files' => 'json'];
+
     // Relationships
     public function chat()
     {

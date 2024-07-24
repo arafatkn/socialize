@@ -8,6 +8,8 @@ export type Chat = {
   user2_id: number;
   user1?: User;
   user2?: User;
+  user1_unread_count: number;
+  user2_unread_count: number;
   created_at: number;
 };
 

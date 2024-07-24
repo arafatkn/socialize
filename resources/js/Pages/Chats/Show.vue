@@ -10,6 +10,7 @@
           :class="ch.id === chat.id ? 'bg-amber-50' : ''"
         >
           {{ getReceiver(ch)?.name }}
+          <XBadge color="success" size="small" :text="getUnreadCount(ch).toString()" class="ml-2" />
         </Link>
       </div>
     </div>
@@ -78,6 +79,7 @@ import XTextarea from '@/components/XTextarea.vue';
 import XFileUpload from '@/components/XFileUpload.vue';
 import XButton from '@/components/XButton.vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
+import XBadge from '@/components/XBadge.vue';
 
 let { chat, chats, messages, user, errors } = defineProps<
   { chat: Chat; chats: Chat[]; messages: PaginatedData<Message> } & InertiaProps
@@ -93,6 +95,10 @@ const receiver = computed(() => getReceiver(chat));
 
 function getReceiver(chat: Chat) {
   return chat.user1?.id === user?.id ? chat.user2 : chat.user1;
+}
+
+function getUnreadCount(chat: Chat) {
+  return chat.user1?.id === user?.id ? chat.user1_unread_count : chat.user2_unread_count;
 }
 
 function sendMessage() {
