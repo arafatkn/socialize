@@ -16,7 +16,7 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'content' => $this->content,
+            'content' => strip_tags($this->content, ['a', 'br']),
             'pinned' => $this->pinned,
             'created_at' => $this->created_at,
             'created_ago' => $this->created_at->diffForHumans(),

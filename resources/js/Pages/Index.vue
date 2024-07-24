@@ -63,7 +63,7 @@ const form = useForm<{ content: string; files?: any[] }>({ content: '' });
 function postStatus() {
   if (!form.files?.length) {
     form.post('/posts', {
-      onSuccess: () => {
+      onStart: () => {
         form.content = '';
         form.files = [];
       },
@@ -78,11 +78,11 @@ function postStatus() {
       files: form.files,
     },
     {
-      onStart: () => (form.processing = true),
-      onSuccess: () => {
+      onStart: () => {
         form.content = '';
         form.files = [];
         showUploader.value = false;
+        form.processing = true;
       },
       onFinish: () => (form.processing = false),
       onError: (err: AnyObject) => {

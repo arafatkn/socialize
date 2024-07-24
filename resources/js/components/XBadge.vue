@@ -17,7 +17,7 @@ withDefaults(defineProps<Props>(), { color: 'info', size: 'normal' });
 const colors = {
   primary: 'bg-indigo-600 text-indigo-800',
   secondary: 'bg-gray-600 text-gray-800',
-  info: 'bg-pink-600 text-pink-800',
+  info: 'bg-pink-600 text-white',
   success: 'bg-green-600 text-white',
   warning: 'bg-lime-600 text-lime-800',
   danger: 'bg-red-600 text-red-800',
