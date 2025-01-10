@@ -37,7 +37,7 @@ const startLogin = () => {
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <form class="space-y-6" @submit.prevent="startLogin" method="POST">
+        <form class="space-y-4" @submit.prevent="startLogin" method="POST">
           <div class="mb-6" v-if="errors?.message || Object.values(flash).filter((v) => v).length">
             <XAlert type="warning" v-if="!!flash?.message">{{ flash?.message }}</XAlert>
             <XAlert type="error" v-if="!!flash?.error">{{ flash?.error }}</XAlert>

@@ -6,7 +6,7 @@ import UserLayout from './layouts/UserLayout.vue';
 import AuthLayout from './layouts/AuthLayout.vue';
 import DefaultLayout from './layouts/DefaultLayout.vue';
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'BDApp';
+const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Socialize';
 
 createInertiaApp({
   title: (title) => (title ? `${title} - ${appName}` : appName),

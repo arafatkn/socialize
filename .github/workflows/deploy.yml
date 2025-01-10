@@ -21,7 +21,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           username: ${{ secrets.SSH_USERNAME }}
           script: |
-            cd /var/www/amardetails/amardetails/
+            cd /var/www/socialize/
             git checkout main -f
             git pull
             php8.3 $(which composer) install
